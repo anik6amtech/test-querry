@@ -46,10 +46,10 @@ class UserSeeder extends Seeder
             }
 
             // Insert users data
-            User::insert($usersData);
+            User::create($usersData);
 
             // Insert user details data
-            UserDetails::insert($userDetailsData);
+            UserDetails::create($userDetailsData);
 
             // Output progress to console
             $inserted = $i + $chunkSize;
