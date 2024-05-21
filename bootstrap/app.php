@@ -10,7 +10,7 @@ return Application::configure(dirname(__DIR__))
 ->withRouting(
     using: function () {
 
-        Route::prefix('api/v1')
+        Route::prefix('')
             ->group(base_path('routes/rest_api/v1/api.php'));
 
         Route::fallback(function () {
