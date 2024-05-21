@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        $chunkSize = 100; // Number of records to insert per chunk
+        $chunkSize = 500; // Number of records to insert per chunk
         $totalRecords = env('MAX_DATA', 10000000); // Default to 10 million if not set in env
 
         for ($i = 0; $i < $totalRecords; $i += $chunkSize) {
@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
                     'user_id' => $userId,
                     'address' => $faker->address,
                     'phone' => $i.$j.$phone,
-                    'phone2' => $i.$j$phone,
+                    'phone2' => $i.$j.$phone,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];

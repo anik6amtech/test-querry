@@ -55,7 +55,6 @@ class UserController extends Controller
                         $query->where('user_details.phone', 'like', '%' . $search . '%')
                               ->orWhere('users.email', 'like', '%' . $search . '%');
                     })
-                    ->select('users.*', 'users.email', 'user_details.phone')
                     ->get();
 
         // Get the query log
@@ -86,7 +85,6 @@ class UserController extends Controller
                     $query->where('user_details.phone2', 'like', '%' . $search . '%')
                           ->orWhere('users.email2', 'like', '%' . $search . '%');
                 })
-                ->select('users.*', 'users.email2', 'user_details.phone2')
                 ->get();
 
     // Get the query log
