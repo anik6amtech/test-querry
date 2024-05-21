@@ -15,7 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade')->index();
             $table->string('address');
-            $table->string('phone')->index();
+            $table->string('phone')->unique()->index();
+            $table->string('phone2')->unique();
             $table->timestamps();
         });
     }
