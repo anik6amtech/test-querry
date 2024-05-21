@@ -26,16 +26,16 @@ class UserSeeder extends Seeder
             for ($j = 0; $j < $chunkSize; $j++) {
                 // Create a unique user ID
                 $userId = str()->uuid();
-                $email = $faker->unique()->safeEmail;
+                $email = "test@email.com";
                 $usersData[] = [
                     'id' => $userId,
                     'name' => $faker->name,
-                    'email' => $email,
-                    'email2' => $email,
+                    'email' => $i.$email,
+                    'email2' => $i.$email,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
-                $phone = $faker->phoneNumber;
+                $phone = rand(1111111111,9999999999);
                 $userDetailsData[] = [
                     'id' => str()->uuid(),
                     'user_id' => $userId,
