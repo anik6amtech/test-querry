@@ -49,17 +49,19 @@ class UserController extends Controller
         // Enable query logging
         DB::enableQueryLog();
 
-        // Execute the query to join the users and userdetails tables
+        // Execute the query to join the users and user_details tables
         $users = User::join('user_details', 'users.id', '=', 'user_details.user_id')
-                    ->where('user_details.phone', 'like', '%' . $search . '%')
-                    ->orWhere('user.email', 'like', '%' . $search . '%')
-                    ->select('users.*', 'user.email', 'user_details.phone')
+                    ->where(function($query) use ($search) {
+                        $query->where('user_details.phone', 'like', '%' . $search . '%')
+                              ->orWhere('users.email', 'like', '%' . $search . '%');
+                    })
+                    ->select('users.*', 'users.email', 'user_details.phone')
                     ->get();
 
         // Get the query log
         $queries = DB::getQueryLog();
 
-        // Calculate the execution time of the query
+        // Calculate the execution time of the query (in milliseconds)
         $executionTime = $queries[0]['time'];
 
         // Prepare the results
@@ -72,35 +74,36 @@ class UserController extends Controller
         // Return the result as JSON
         dd($result);
     }
-
 
     public function searchUserByPhoneOrAddress2($search)
-    {
-        // Enable query logging
-        DB::enableQueryLog();
+{
+    // Enable query logging
+    DB::enableQueryLog();
 
-        // Execute the query to join the users and userdetails tables
-        $users = User::join('user_details', 'users.id', '=', 'user_details.user_id')
-                    ->where('user_details.phone2', 'like', '%' . $search . '%')
-                    ->orWhere('user.email2', 'like', '%' . $search . '%')
-                    ->select('users.*', 'user.email2', 'user_details.phone2')
-                    ->get();
+    // Execute the query to join the users and user_details tables
+    $users = User::join('user_details', 'users.id', '=', 'user_details.user_id')
+                ->where(function($query) use ($search) {
+                    $query->where('user_details.phone2', 'like', '%' . $search . '%')
+                          ->orWhere('users.email2', 'like', '%' . $search . '%');
+                })
+                ->select('users.*', 'users.email2', 'user_details.phone2')
+                ->get();
 
-        // Get the query log
-        $queries = DB::getQueryLog();
+    // Get the query log
+    $queries = DB::getQueryLog();
 
-        // Calculate the execution time of the query
-        $executionTime = $queries[0]['time'];
+    // Calculate the execution time of the query (in milliseconds)
+    $executionTime = $queries[0]['time'];
 
-        // Prepare the results
-        $result = [
-            'users' => $users,
-            'execution_time' => $executionTime . ' ms',
-            'query' => $queries[0]['query']
-        ];
+    // Prepare the results
+    $result = [
+        'users' => $users,
+        'execution_time' => $executionTime . ' ms',
+        'query' => $queries[0]['query']
+    ];
 
-        // Return the result as JSON
-        dd($result);
-    }
+    // Return the result as JSON
+    dd($result);
+}
 
 }
