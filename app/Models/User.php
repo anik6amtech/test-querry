@@ -7,7 +7,7 @@ class User extends BaseModel
 {
    use HasUuids;
 
-   protected $fillable = ['name', 'email', 'created_at', 'updated_at'];
+   protected $fillable = ['id','name', 'email', 'created_at', 'updated_at'];
 
     public function userDetails()
     {
