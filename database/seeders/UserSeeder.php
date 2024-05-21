@@ -25,9 +25,10 @@ class UserSeeder extends Seeder
 
             for ($j = 0; $j < $chunkSize; $j++) {
                 // Create a unique user ID
-                $userId = $i + $j + 1;
+                $userId = str()->uuid();
                 $email = $faker->unique()->safeEmail;
                 $usersData[] = [
+                    'id' => $userId,
                     'name' => $faker->name,
                     'email' => $email,
                     'email2' => $email,
@@ -36,6 +37,7 @@ class UserSeeder extends Seeder
                 ];
                 $phone = $faker->phoneNumber;
                 $userDetailsData[] = [
+                    'id' => str()->uuid(),
                     'user_id' => $userId,
                     'address' => $faker->address,
                     'phone' => $phone,
@@ -46,10 +48,10 @@ class UserSeeder extends Seeder
             }
 
             // Insert users data
-            User::create($usersData);
+            User::insert($usersData);
 
             // Insert user details data
-            UserDetails::create($userDetailsData);
+            UserDetails::insert($userDetailsData);
 
             // Output progress to console
             $inserted = $i + $chunkSize;
