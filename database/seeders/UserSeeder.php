@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
                     'id' => $userId,
                     'name' => $faker->name,
                     'email' => $i.$email,
-                    'email2' => $i.$email,
+                    'email2' => $i.$i.$email,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
