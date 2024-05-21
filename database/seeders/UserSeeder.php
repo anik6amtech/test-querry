@@ -40,8 +40,8 @@ class UserSeeder extends Seeder
                     'id' => str()->uuid(),
                     'user_id' => $userId,
                     'address' => $faker->address,
-                    'phone' => $phone,
-                    'phone2' => $phone,
+                    'phone' => $i.$j.$phone,
+                    'phone2' => $i.$j.$i.$phone,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
