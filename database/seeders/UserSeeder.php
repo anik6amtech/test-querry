@@ -29,8 +29,8 @@ class UserSeeder extends Seeder
                 $email = $faker->unique()->safeEmail;
                 $usersData[] = [
                     'name' => $faker->name,
-                    'email' => $$email,
-                    'email2' => $$email,
+                    'email' => $email,
+                    'email2' => $email,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
