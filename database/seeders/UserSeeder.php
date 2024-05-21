@@ -30,8 +30,8 @@ class UserSeeder extends Seeder
                 $usersData[] = [
                     'id' => $userId,
                     'name' => $faker->name,
-                    'email' => $i.$email,
-                    'email2' => $i.$i.$email,
+                    'email' => $i.$j.$email,
+                    'email2' => $i.$i.$j.$email,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
