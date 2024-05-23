@@ -54,15 +54,13 @@ class UserController extends Controller
         // Initialize an empty collection to hold the results
         $usersCollection = collect();
 
-        // Chunk the query results
-        User::join('user_details', 'users.id', '=', 'user_details.user_id')
-            ->where(function($query) use ($search) {
-                $query->where('user_details.phone', 'like', '%' . $search . '%')
+        // Chunk the query results with eager loading
+        User::with('userDetails')
+            ->whereHas('userDetails', function ($query) use ($search) {
+                $query->where('phone', 'like', '%' . $search . '%')
                       ->orWhere('users.email', 'like', '%' . $search . '%');
             })
-            ->select('users.id', 'users.name', 'users.email', 'user_details.phone')
             ->chunk($chunkSize, function ($users) use (&$usersCollection) {
-                // Merge each chunk into the main collection
                 $usersCollection = $usersCollection->merge($users);
             });
 
@@ -93,15 +91,13 @@ class UserController extends Controller
         // Initialize an empty collection to hold the results
         $usersCollection = collect();
 
-        // Chunk the query results
-        User::join('user_details', 'users.id', '=', 'user_details.user_id')
-            ->where(function($query) use ($search) {
-                $query->where('user_details.phone2', 'like', '%' . $search . '%')
-                      ->orWhere('users.email2', 'like', '%' . $search . '%');
+        // Chunk the query results with eager loading
+        User::with('userDetails')
+            ->whereHas('userDetails', function ($query) use ($search) {
+                $query->where('phone2', 'like', '%' . $search . '%')
+                      ->orWhere('users.email2a', 'like', '%' . $search . '%');
             })
-            ->select('users.id', 'users.name', 'users.email2', 'user_details.phone2')
             ->chunk($chunkSize, function ($users) use (&$usersCollection) {
-                // Merge each chunk into the main collection
                 $usersCollection = $usersCollection->merge($users);
             });
 
