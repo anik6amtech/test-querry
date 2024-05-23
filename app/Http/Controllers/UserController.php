@@ -84,32 +84,42 @@ class UserController extends Controller
     }
     public function searchUserByPhoneOrAddress2($search)
 {
-    // Enable query logging
-    DB::enableQueryLog();
+        // Enable query logging
+        DB::enableQueryLog();
 
-    // Execute the query to join the users and user_details tables
-    $users = User::join('user_details', 'users.id', '=', 'user_details.user_id')
-                ->where(function($query) use ($search) {
-                    $query->where('user_details.phone2', 'like', '%' . $search . '%')
-                          ->orWhere('users.email2', 'like', '%' . $search . '%');
-                })
-                ->get();
+        // Define the chunk size
+        $chunkSize = 1000;
 
-    // Get the query log
-    $queries = DB::getQueryLog();
+        // Initialize an empty collection to hold the results
+        $usersCollection = collect();
 
-    // Calculate the execution time of the query (in milliseconds)
-    $executionTime = $queries[0]['time'];
+        // Chunk the query results
+        User::join('user_details', 'users.id', '=', 'user_details.user_id')
+            ->where(function($query) use ($search) {
+                $query->where('user_details.phone2', 'like', '%' . $search . '%')
+                      ->orWhere('users.email2', 'like', '%' . $search . '%');
+            })
+            ->select('users.id', 'users.name', 'users.email2', 'user_details.phone2')
+            ->chunk($chunkSize, function ($users) use (&$usersCollection) {
+                // Merge each chunk into the main collection
+                $usersCollection = $usersCollection->merge($users);
+            });
 
-    // Prepare the results
-    $result = [
-        'users' => $users,
-        'execution_time' => $executionTime . ' ms',
-        'query' => $queries[0]['query']
-    ];
+        // Get the query log
+        $queries = DB::getQueryLog();
 
-    // Return the result as JSON
-    dd($result);
+        // Calculate the execution time of the query (in milliseconds)
+        $executionTime = $queries[0]['time'];
+
+        // Prepare the results
+        $result = [
+            'users' => $usersCollection,
+            'execution_time' => $executionTime . ' ms',
+            'query' => $queries[0]['query']
+        ];
+
+        // Return the result as JSON
+        dd($result);
 }
 
 }
