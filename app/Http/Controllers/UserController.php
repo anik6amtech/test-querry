@@ -95,7 +95,7 @@ class UserController extends Controller
         User::with('userDetails')
             ->whereHas('userDetails', function ($query) use ($search) {
                 $query->where('phone2', 'like', '%' . $search . '%')
-                      ->orWhere('users.email2a', 'like', '%' . $search . '%');
+                      ->orWhere('users.email2', 'like', '%' . $search . '%');
             })
             ->chunk($chunkSize, function ($users) use (&$usersCollection) {
                 $usersCollection = $usersCollection->merge($users);
