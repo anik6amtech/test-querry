@@ -5,7 +5,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class User extends BaseModel
 {
-   use HasUuids;
 
    protected $fillable = ['id','name', 'email', 'created_at', 'updated_at'];
 
