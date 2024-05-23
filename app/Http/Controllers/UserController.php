@@ -43,19 +43,28 @@ class UserController extends Controller
        dd($result);
     }
 
-
     public function searchUserByPhoneOrAddress($search)
     {
         // Enable query logging
         DB::enableQueryLog();
 
-        // Execute the query to join the users and user_details tables
-        $users = User::join('user_details', 'users.id', '=', 'user_details.user_id')
-                    ->where(function($query) use ($search) {
-                        $query->where('user_details.phone', 'like', '%' . $search . '%')
-                              ->orWhere('users.email', 'like', '%' . $search . '%');
-                    })
-                    ->get();
+        // Define the chunk size
+        $chunkSize = 1000;
+
+        // Initialize an empty collection to hold the results
+        $usersCollection = collect();
+
+        // Chunk the query results
+        User::join('user_details', 'users.id', '=', 'user_details.user_id')
+            ->where(function($query) use ($search) {
+                $query->where('user_details.phone', 'like', '%' . $search . '%')
+                      ->orWhere('users.email', 'like', '%' . $search . '%');
+            })
+            ->select('users.id', 'users.name', 'users.email', 'user_details.phone')
+            ->chunk($chunkSize, function ($users) use (&$usersCollection) {
+                // Merge each chunk into the main collection
+                $usersCollection = $usersCollection->merge($users);
+            });
 
         // Get the query log
         $queries = DB::getQueryLog();
@@ -65,7 +74,7 @@ class UserController extends Controller
 
         // Prepare the results
         $result = [
-            'users' => $users,
+            'users' => $usersCollection,
             'execution_time' => $executionTime . ' ms',
             'query' => $queries[0]['query']
         ];
@@ -73,7 +82,6 @@ class UserController extends Controller
         // Return the result as JSON
         dd($result);
     }
-
     public function searchUserByPhoneOrAddress2($search)
 {
     // Enable query logging
